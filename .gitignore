@@ -1,0 +1,61 @@
+# Compiled object files
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Debug files
+*.dSYM/
+*.stackdump
+*.pch
+
+# IDE / Editor settings
+.vscode/
+.idea/
+*.swp
+*~
+
+# CMake build
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+build/
+Debug/
+Release/
+
+# Visual Studio
+*.vcxproj*
+*.sln
+*.user
+*.aps
+*.ncb
+*.sdf
+*.opendb
+*.VC.db
+ipch/
+
+# Xcode
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+DerivedData/
+*.xcworkspace
+
+# Other
+*.log
+*.tmp
