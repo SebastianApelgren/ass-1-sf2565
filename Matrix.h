@@ -10,10 +10,10 @@
 
 class Matrix {
 public:
-    int M = 10;
-    int N = 10;
+    double M = 10;
+    double N = 10;
     explicit Matrix(double a);
-    std::vector<std::vector<Point>> grid = std::vector<std::vector<Point>>(M, std::vector<Point>(N));
+    std::vector<std::vector<Point>> grid = std::vector<std::vector<Point>>(M+1, std::vector<Point>(N+1));
 
 private:
     Point generatePoint(int row, int col, double a);
