@@ -6,7 +6,7 @@
 #include "Point.h"
 #include <vector>
 
-Matrix::Matrix(double a, double M, double N) {
+Matrix::Matrix(const double a, const double M, const double N) {
     this->a = a;
     this->M = M;
     this->N = N;
@@ -19,14 +19,14 @@ Matrix::Matrix(double a, double M, double N) {
     }
 }
 
-Point Matrix::generatePoint(int row, int col) {
+Point Matrix::generatePoint(const int row, const int col) const {
     double const xhi = col / N;
     double const eta = row / M;
 
     return projSummation(xhi, eta);
 }
 
-Point Matrix::rFunction(double xhi, double eta) {
+Point Matrix::rFunction(double xhi, double eta) const {
     if (eta == 0) {
         return {xhi, 4*a*(xhi-1)*xhi};
     } if (eta == 1) {
@@ -37,21 +37,21 @@ Point Matrix::rFunction(double xhi, double eta) {
     return {0,0};
 }
 
-Point Matrix::projXhi(double xhi, double eta) {
+Point Matrix::projXhi(const double xhi, const double eta) const {
     return rFunction(0,eta) * (1-xhi) + rFunction(1,eta) * xhi;
 }
 
-Point Matrix::projEta(double xhi, double eta) {
+Point Matrix::projEta(const double xhi, const double eta) const {
     return rFunction(xhi,0) * (1-eta) + rFunction(xhi,1) * eta;
 }
 
-Point Matrix::projPoduct(double xhi, double eta) {
+Point Matrix::projProduct(const double xhi, const double eta) const {
     return rFunction(0,0) * (1 - xhi) * (1 - eta) + rFunction(0,1) * eta * (1 - xhi) +
         rFunction(1,0) * xhi * (1 - eta) + rFunction(1,1) * eta * xhi;
 }
 
-Point Matrix::projSummation(double xhi, double eta) {
-    return projEta(xhi, eta) + projXhi(xhi, eta) - projPoduct(xhi, eta);
+Point Matrix::projSummation(const double xhi, const double eta) const {
+    return projEta(xhi, eta) + projXhi(xhi, eta) - projProduct(xhi, eta);
 }
 
 

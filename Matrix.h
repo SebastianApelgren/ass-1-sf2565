@@ -16,12 +16,12 @@ public:
     std::vector<std::vector<Point>> grid;
     Matrix(double a, double M, double N);
 private:
-    Point generatePoint(int row, int col);
-    Point rFunction(double xhi, double eta);
-    Point projXhi(double xhi, double eta);
-    Point projEta(double xhi, double eta);
-    Point projPoduct(double xhi, double eta);
-    Point projSummation(double xhi, double eta);
+    Point generatePoint(int row, int col) const;
+    Point rFunction(double xhi, double eta) const;
+    Point projXhi(double xhi, double eta) const;
+    Point projEta(double xhi, double eta) const;
+    Point projProduct(double xhi, double eta) const;
+    Point projSummation(double xhi, double eta) const;
 };
 
 
