@@ -14,3 +14,15 @@ std::ostream& operator<<(std::ostream& os, const Point& pt){
     os << "(" << pt.x << "," << pt.y << ")";
     return os;
 }
+
+Point Point::operator+(const Point& rhs) const {
+    return Point{x + rhs.x, y + rhs.y};
+}
+
+Point Point::operator-(const Point &rhs) const {
+    return {x - rhs.x, y - rhs.y};
+}
+
+Point Point::operator*(double rhs) const {
+    return {x*rhs,y*rhs};
+}

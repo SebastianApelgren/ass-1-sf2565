@@ -8,4 +8,6 @@ add_executable(untitled main.cpp
         Point.h
         Matrix.cpp
         Matrix.h
+        FileHandler.cpp
+        FileHandler.h
 )

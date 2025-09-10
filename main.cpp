@@ -1,18 +1,29 @@
 #include <iostream>
 #include "Matrix.h"
+#include "FileHandler.h"
 
 // TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 int main() {
 
-    Matrix mat(0.5);
+    double M = 10;
+    double N = 10;
 
-    for ( std::vector<Point> row : mat.grid ) {
-        for (Point p : row) {
+    Matrix mat(0.5, M, N);
+
+    for ( const std::vector<Point>& row : mat.grid ) {
+        for (const Point& p : row) {
             std::cout << p;
         }
         std::cout << "\n";
     }
 
+    std::string filePath = "transformed-matrix.txt";
+    bool result = FileHandler::writeMatrixToFile(mat, filePath);
+    if (!result) {
+        std::cout << "Error loading the file";
+    } else {
+        std::cout << "Wrote matrix to file successfully";
+    }
+
     return 0;
-    // TIP See CLion help at <a href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>. Also, you can try interactive lessons for CLion by selecting 'Help | Learn IDE Features' from the main menu.
 }

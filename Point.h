@@ -13,6 +13,10 @@ public:
     double y;
     Point() = default;
     Point(double x, double y);
+    Point operator+(const Point& rhs) const;
+    Point operator-(const Point& rhs) const;
+    Point operator*(double rhs) const;
+
 
     friend std::ostream& operator<<(std::ostream& os, const Point& pt);
 };

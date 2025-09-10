@@ -10,13 +10,18 @@
 
 class Matrix {
 public:
-    double M = 10;
-    double N = 10;
-    explicit Matrix(double a);
-    std::vector<std::vector<Point>> grid = std::vector<std::vector<Point>>(M+1, std::vector<Point>(N+1));
-
+    double a;
+    double M;
+    double N;
+    std::vector<std::vector<Point>> grid;
+    Matrix(double a, double M, double N);
 private:
-    Point generatePoint(int row, int col, double a);
+    Point generatePoint(int row, int col);
+    Point rFunction(double xhi, double eta);
+    Point projXhi(double xhi, double eta);
+    Point projEta(double xhi, double eta);
+    Point projPoduct(double xhi, double eta);
+    Point projSummation(double xhi, double eta);
 };
 
 
