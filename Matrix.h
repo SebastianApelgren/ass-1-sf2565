@@ -14,7 +14,9 @@ public:
     double M;
     double N;
     std::vector<std::vector<Point>> grid;
+    void fillGridPoints();
     Matrix(double a, double M, double N);
+    void resize(double M, double N);
 private:
     Point generatePoint(int row, int col) const;
     Point rFunction(double xhi, double eta) const;
@@ -22,6 +24,12 @@ private:
     Point projEta(double xhi, double eta) const;
     Point projProduct(double xhi, double eta) const;
     Point projSummation(double xhi, double eta) const;
+
+    static double uFunction(double x, double y);
+    static std::array<double,2> duExact(double x, double y);
+    static std::array<double,2> duNumerical(double x, double y);
+
+    std::array<double,2> calculateError() const;
 };
 
 
