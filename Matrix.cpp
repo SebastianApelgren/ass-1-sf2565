@@ -10,18 +10,18 @@ Matrix::Matrix(const double a, const double M, const double N) {
     this->a = a;
     this->M = M;
     this->N = N;
-    this-> grid = std::vector<std::vector<Point>>(M+1, std::vector<Point>(N+1));
+    this-> grid = std::vector<std::vector<Point>>(N+1, std::vector<Point>(M+1));
 
-    for ( int row = 0 ; row < M +1 ; ++row) {
-        for ( int col = 0 ; col < N +1 ; ++col) {
+    for ( int row = 0 ; row < N + 1 ; ++row) {
+        for ( int col = 0 ; col < M + 1 ; ++col) {
             grid[row][col] = generatePoint(row,col);
         }
     }
 }
 
 Point Matrix::generatePoint(const int row, const int col) const {
-    double const xhi = col / N;
-    double const eta = row / M;
+    double const xhi = col / M;
+    double const eta = row / N;
 
     return projSummation(xhi, eta);
 }
