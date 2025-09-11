@@ -26,23 +26,36 @@ int main() {
     if (!result) {
         std::cout << "Error loading the file";
     } else {
-        std::cout << "Wrote matrix to file successfully";
+        std::cout << "Wrote matrix to file successfully" << "\n";
     }
 
     //Task 2: Numerical Derivatives
 
     a = 0.1;
 
-    int nrOfIterations = 10;
+    int nrOfIterations = 12;
 
-    for (int i = 2; i < nrOfIterations; i++) {
+    std::vector<double> step_sizes;
+    std::vector<double> errs;
 
-        M = pow(2,i);
-        N = pow(2,i);
+    std::cout << "\n" << "Starting Part 2" << "\n";
 
-        mat.resize(M,N);
+     for (int i = 2; i < nrOfIterations; ++i) {
+         M = pow(2,i);
+         N = pow(2,i);
+         mat.resize(M, N);
 
+         double err = mat.calculateError();
+         double step_size = 1 / M;
+
+         step_sizes.emplace_back(step_size);
+         errs.emplace_back(err);
     }
+
+    FileHandler::writeVectorToFile(step_sizes,   "step_sizes.txt");
+    FileHandler::writeVectorToFile(errs, "errors.txt");
+
+    std::cout << "Wrote step_sizes.txt and errors.txt\n";
 
     return 0;
 }

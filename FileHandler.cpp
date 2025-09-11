@@ -29,3 +29,17 @@ bool FileHandler::writeMatrixToFile(const Matrix& mat, const std::string& filePa
 
     return true;
 }
+
+bool FileHandler::writeVectorToFile(const std::vector<double> vec, const std::string &filePath) {
+    std::ofstream file(filePath);
+
+    if (!file) {
+        return false;
+    }
+
+    for ( const double& element : vec ) {
+        file << element << "\n";
+    }
+
+    return true;
+}

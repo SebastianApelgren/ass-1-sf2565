@@ -11,6 +11,7 @@
 class FileHandler {
 public:
     static bool writeMatrixToFile(const Matrix& mat, const std::string& filePath);
+    static bool writeVectorToFile(const std::vector<double> vec, const std::string& filePath);
 };
 
 
