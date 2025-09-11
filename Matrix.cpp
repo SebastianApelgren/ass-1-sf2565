@@ -3,6 +3,9 @@
 //
 
 #include "Matrix.h"
+
+#include <iostream>
+
 #include "Point.h"
 #include <vector>
 
@@ -111,7 +114,6 @@ double Matrix::beta(double xhi, double eta) const {
 
 double Matrix::calculateError() const {
     double accum = 0.0;
-    int count = 0;
 
     for (int row = 0; row < N + 1; ++row) {
         for (int col = 0; col < M + 1; ++col) {
@@ -122,9 +124,8 @@ double Matrix::calculateError() const {
             double ey = exact[1] - num[1];
 
             accum += ex*ex + ey*ey;
-            ++count;
         }
     }
 
-    return std::sqrt(accum / count);
+    return std::sqrt(accum / ((M+1)*(N+1)));
 }
