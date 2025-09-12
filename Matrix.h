@@ -30,6 +30,12 @@ private:
     double alpha(double xhi, double eta) const;
     double beta(double xhi, double eta) const;
 
+    double finiteDiffUXhi(int row, int col) const;
+    double finiteDiffUEta(int row, int col) const;
+
+    static double xhiToX(double xhi, double eta);
+    double etaToY(double xhi, double eta) const;
+
     std::array<double,2> duNumerical(int row, int col) const;
     static double u(double x, double y);
     static std::array<double,2> duExact(double x, double y);

@@ -52,6 +52,14 @@ Point Matrix::rFunction(double xhi, double eta) const {
     return {0,0};
 }
 
+double Matrix::xhiToX(double xhi, double eta) {
+    return xhi;
+}
+
+double Matrix::etaToY(double xhi, double eta) const {
+    return eta + 4 * a * xhi * xhi - 4 * a * xhi - 8 * a * eta * xhi * xhi + 8 * a * eta * xhi;
+}
+
 Point Matrix::projXhi(const double xhi, const double eta) const {
     return rFunction(0,eta) * (1-xhi) + rFunction(1,eta) * xhi;
 }
@@ -81,29 +89,54 @@ std::array<double, 2> Matrix::duNumerical(int row,  int col) const {
     double const xhi = col / M;
     double const eta = row / N;
 
+    double finiteDiffX = finiteDiffUXhi(row, col);
+    double finiteDiffY = finiteDiffUEta(row, col);
+
+    double alphaVal = alpha(xhi, eta);
+    double betaVal  = beta(xhi, eta);
+
+    return {finiteDiffX + alphaVal * finiteDiffY / betaVal, finiteDiffY / betaVal };
+}
+
+double Matrix::finiteDiffUXhi(int row, int col) const {
+    double const xhi = col / M;
+    double const eta = row / N;
+
     double dx = 1/M;
-    double dy = 1/N;
 
     if (xhi == 0) {
-        double uXhiSideDiff = (u((col+1)/M,eta) - u(col/M, eta)) / dx;
-        double uEtaCentDiff = (u(xhi, (row+1)/N) - u(xhi, (row-1)/N))/ (2*dy);
-        return {uXhiSideDiff + alpha(xhi, eta) / beta(xhi, eta) * uEtaCentDiff , 1 / beta(xhi, eta) * uEtaCentDiff };
+        double xhiNext = (col + 1)/M;
+        double xhiPrev = col/M;
+        return (u(xhiNext,eta) - u(xhiPrev, eta)) / dx;
     } else if (xhi == 1) {
-        double uXhiSideDiff = (u(col/M, eta) - u((col-1)/M, eta)) / dx;
-        double uEtaCentDiff = (u(xhi, (row+1)/N) - u(xhi, (row-1)/N))/(2*dy);
-        return {uXhiSideDiff + alpha(xhi, eta) / beta(xhi, eta) * uEtaCentDiff , 1 / beta(xhi, eta) * uEtaCentDiff };
-    } else if (eta == 0) {
-        double uXhiCentDiff = (u((col+1)/M, eta) - u((col-1)/M, eta))/(2*dx);
-        double uEtaSideDiff = (u(xhi, (row+1)/N) - u(xhi, row/N)) / dy;
-        return {uXhiCentDiff + alpha(xhi, eta) / beta(xhi, eta) * uEtaSideDiff , 1 / beta(xhi, eta) * uEtaSideDiff };
-    } else if (eta == 1) {
-        double uXhiCentDiff = (u((col+1)/M, eta) - u((col-1)/M, eta))/(2*dx);
-        double uEtaSideDiff = (u(xhi, row/N) - u(xhi, (row-1)/N)) / dy;
-        return {uXhiCentDiff + alpha(xhi, eta) / beta(xhi, eta) * uEtaSideDiff , 1 / beta(xhi, eta) * uEtaSideDiff };
+        double xhiNext = col/M;
+        double xhiPrev = (col - 1)/M;
+        return (u(xhiNext, eta) - u(xhiPrev, eta)) / dx;
     } else {
-        double uXhiCentDiff = (u((col+1)/M, eta) - u((col-1)/M, eta))/(2*dx);
-        double uEtaCentDiff = (u(xhi, (row+1)/N) - u(xhi, (row-1)/N))/(2*dy);
-        return {uXhiCentDiff + alpha(xhi, eta) / beta(xhi, eta) * uEtaCentDiff , 1 / beta(xhi, eta) * uEtaCentDiff };
+        double xhiNext = (col + 1)/M;
+        double xhiPrev = (col - 1)/M;
+        return (u(xhiNext, eta) - u(xhiPrev, eta)) / (2*dx);
+    }
+}
+
+double Matrix::finiteDiffUEta(int row, int col) const {
+    double const xhi = col / M;
+    double const eta = row / N;
+
+    double dy = 1/N;
+
+    if (eta == 0) {
+        double etaNext = (row + 1)/N;
+        double etaPrev =  row/N;
+        return (u(xhi,etaNext) - u(xhi, etaPrev)) / dy;
+    } else if (eta == 1) {
+        double etaNext = row/N;
+        double etaPrev = (row - 1)/N;
+        return (u(xhi, etaNext) - u(xhi, etaPrev)) / dy;
+    } else {
+        double etaNext = (row + 1)/N;
+        double etaPrev = (row - 1)/N;
+        return (u(xhi, etaNext) - u(xhi, etaPrev)) / (2*dy);
     }
 }
 
@@ -132,7 +165,7 @@ double Matrix::calculateError() const {
         }
     }
 
-    double rms = std::sqrt(accum / ((M)*(N)));
+    double rms = accum / ((M+1)*(N+1));
 
     double maxErr = *std::max_element(allErrs.begin(), allErrs.end());
 
