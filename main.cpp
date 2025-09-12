@@ -8,8 +8,8 @@ int main() {
 
     //Task 1: Grid Generation
 
-    double M = 10;
-    double N = 10;
+    double M = 5;
+    double N = 5;
     double a = 0.5;
 
     Matrix mat(a, M, N);
@@ -31,11 +31,11 @@ int main() {
 
     //Task 2: Numerical Derivatives
 
-    a = 0.1;
+    mat.a = 0;
 
     int nrOfIterations = 12;
 
-    std::vector<double> step_sizes;
+    std::vector<double> stepsVec;
     std::vector<double> errs;
 
     std::cout << "\n" << "Starting Part 2" << "\n";
@@ -46,16 +46,15 @@ int main() {
          mat.resize(M, N);
 
          double err = mat.calculateError();
-         double step_size = 1 / M;
 
-         step_sizes.emplace_back(step_size);
+         stepsVec.emplace_back(M);
          errs.emplace_back(err);
     }
 
-    FileHandler::writeVectorToFile(step_sizes,   "step_sizes.txt");
+    FileHandler::writeVectorToFile(stepsVec,   "stepsVec.txt");
     FileHandler::writeVectorToFile(errs, "errors.txt");
 
-    std::cout << "Wrote step_sizes.txt and errors.txt\n";
+    std::cout << "Wrote stepsVec.txt and errors.txt\n";
 
     return 0;
 }

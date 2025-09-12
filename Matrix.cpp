@@ -81,25 +81,28 @@ std::array<double, 2> Matrix::duNumerical(int row,  int col) const {
     double const xhi = col / M;
     double const eta = row / N;
 
+    double dx = 1/M;
+    double dy = 1/N;
+
     if (xhi == 0) {
-        double uXhiSideDiff = (u((col+1)/M,eta) - u(col/M, eta)) / N;
-        double uEtaCentDiff = (u(xhi, (row+1)/N) - u(xhi, (row-1)/N))/(2/N);
+        double uXhiSideDiff = (u((col+1)/M,eta) - u(col/M, eta)) / dx;
+        double uEtaCentDiff = (u(xhi, (row+1)/N) - u(xhi, (row-1)/N))/ (2*dy);
         return {uXhiSideDiff + alpha(xhi, eta) / beta(xhi, eta) * uEtaCentDiff , 1 / beta(xhi, eta) * uEtaCentDiff };
     } else if (xhi == 1) {
-        double uXhiSideDiff = (u(col/M, eta) - u((col-1)/M, eta)) / M;
-        double uEtaCentDiff = (u(xhi, (row+1)/N) - u(xhi, (row-1)/N))/(2/N);
+        double uXhiSideDiff = (u(col/M, eta) - u((col-1)/M, eta)) / dx;
+        double uEtaCentDiff = (u(xhi, (row+1)/N) - u(xhi, (row-1)/N))/(2*dy);
         return {uXhiSideDiff + alpha(xhi, eta) / beta(xhi, eta) * uEtaCentDiff , 1 / beta(xhi, eta) * uEtaCentDiff };
     } else if (eta == 0) {
-        double uXhiCentDiff = (u((col+1)/M, eta) - u((col-1)/M, eta))/(2/M);
-        double uEtaSideDiff = (u(xhi, (row+1)/N) - u(xhi, row/N)) / N;
+        double uXhiCentDiff = (u((col+1)/M, eta) - u((col-1)/M, eta))/(2*dx);
+        double uEtaSideDiff = (u(xhi, (row+1)/N) - u(xhi, row/N)) / dy;
         return {uXhiCentDiff + alpha(xhi, eta) / beta(xhi, eta) * uEtaSideDiff , 1 / beta(xhi, eta) * uEtaSideDiff };
     } else if (eta == 1) {
-        double uXhiCentDiff = (u((col+1)/M, eta) - u((col-1)/M, eta))/(2/M);
-        double uEtaSideDiff = (u(xhi, row/N) - u(xhi, (row-1)/N)) / N;
+        double uXhiCentDiff = (u((col+1)/M, eta) - u((col-1)/M, eta))/(2*dx);
+        double uEtaSideDiff = (u(xhi, row/N) - u(xhi, (row-1)/N)) / dy;
         return {uXhiCentDiff + alpha(xhi, eta) / beta(xhi, eta) * uEtaSideDiff , 1 / beta(xhi, eta) * uEtaSideDiff };
     } else {
-        double uXhiCentDiff = (u((col+1)/M, eta) - u((col-1)/M, eta))/(2/M);
-        double uEtaCentDiff = (u(xhi, (row+1)/N) - u(xhi, (row-1)/N))/(2/N);
+        double uXhiCentDiff = (u((col+1)/M, eta) - u((col-1)/M, eta))/(2*dx);
+        double uEtaCentDiff = (u(xhi, (row+1)/N) - u(xhi, (row-1)/N))/(2*dy);
         return {uXhiCentDiff + alpha(xhi, eta) / beta(xhi, eta) * uEtaCentDiff , 1 / beta(xhi, eta) * uEtaCentDiff };
     }
 }
@@ -114,18 +117,24 @@ double Matrix::beta(double xhi, double eta) const {
 
 double Matrix::calculateError() const {
     double accum = 0.0;
+    std::vector<double> allErrs;
 
     for (int row = 0; row < N + 1; ++row) {
         for (int col = 0; col < M + 1; ++col) {
-            auto exact = duExact(grid[row][col].x, grid[row][col].y);
-            auto num   = duNumerical(row, col);
+            std::array<double,2> exact = duExact(grid[row][col].x, grid[row][col].y);
+            std::array<double,2> num   = duNumerical(row, col);
 
-            double ex = exact[0] - num[0];
-            double ey = exact[1] - num[1];
+            double ex = abs(exact[0] - num[0]);
+            double ey = abs(exact[1] - num[1]);
 
-            accum += ex*ex + ey*ey;
+            accum += ex + ey;
+            allErrs.emplace_back(ex + ey);
         }
     }
 
-    return std::sqrt(accum / ((M+1)*(N+1)));
+    double rms = std::sqrt(accum / ((M)*(N)));
+
+    double maxErr = *std::max_element(allErrs.begin(), allErrs.end());
+
+    return rms;
 }

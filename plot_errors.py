@@ -1,20 +1,28 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Load the data from files
-h = np.loadtxt("cmake-build-debug/step_sizes.txt")
+stepsVec = np.loadtxt("cmake-build-debug/stepsVec.txt")
 errors = np.loadtxt("cmake-build-debug/errors.txt")
 
-# Make a log-log plot
 plt.figure(figsize=(6, 4))
-plt.loglog(h, errors, marker="o", linestyle="-", label="RMS error")
+plt.loglog(stepsVec, errors, marker="o", linestyle="-", label="error")
 
-# Add labels and grid
-plt.xlabel("Step size h")
+ref_h = stepsVec[0]
+ref_e = errors[0]
+ref_line = ref_e * (stepsVec / ref_h)**(-2)
+
+plt.loglog(stepsVec, ref_line, "--", label="slope -2")
+
+ref_h_1 = stepsVec[0]
+ref_e_1 = errors[0]
+ref_line_1 = ref_e_1 * (stepsVec / ref_h_1)**(-1)
+
+plt.loglog(stepsVec, ref_line_1, "--", label="slope -1")
+
+plt.xlabel("M")
 plt.ylabel("Error")
 plt.title("Convergence of numerical method")
 plt.grid(True, which="both", ls="--", alpha=0.7)
 plt.legend()
-
 plt.tight_layout()
 plt.show()
