@@ -38,6 +38,7 @@ private:
 
     std::array<double,2> duNumerical(int row, int col) const;
     static double u(double x, double y);
+    double uTakeInComp(double xhi, double eta) const;
     static std::array<double,2> duExact(double x, double y);
 };
 

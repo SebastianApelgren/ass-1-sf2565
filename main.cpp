@@ -31,7 +31,7 @@ int main() {
 
     //Task 2: Numerical Derivatives
 
-    mat.a = 0;
+    mat.a = 0.1;
 
     int nrOfIterations = 12;
 

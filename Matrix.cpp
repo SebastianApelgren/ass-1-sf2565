@@ -104,20 +104,27 @@ double Matrix::finiteDiffUXhi(int row, int col) const {
 
     double dx = 1/M;
 
-    if (xhi == 0) {
+    if (col == 0) {
         double xhiNext = (col + 1)/M;
         double xhiPrev = col/M;
-        return (u(xhiNext,eta) - u(xhiPrev, eta)) / dx;
-    } else if (xhi == 1) {
+        return (uTakeInComp(xhiNext,eta) - uTakeInComp(xhiPrev, eta)) / dx;
+    } else if (col == M) {
         double xhiNext = col/M;
         double xhiPrev = (col - 1)/M;
-        return (u(xhiNext, eta) - u(xhiPrev, eta)) / dx;
+        return (uTakeInComp(xhiNext, eta) - uTakeInComp(xhiPrev, eta)) / dx;
     } else {
         double xhiNext = (col + 1)/M;
         double xhiPrev = (col - 1)/M;
-        return (u(xhiNext, eta) - u(xhiPrev, eta)) / (2*dx);
+        return (uTakeInComp(xhiNext, eta) - uTakeInComp(xhiPrev, eta)) / (2*dx);
     }
 }
+
+double Matrix::uTakeInComp(double xhi, double eta) const {
+    double x = xhiToX(xhi, eta);
+    double y = etaToY(xhi, eta);
+    return u(x,y);
+}
+
 
 double Matrix::finiteDiffUEta(int row, int col) const {
     double const xhi = col / M;
@@ -125,18 +132,18 @@ double Matrix::finiteDiffUEta(int row, int col) const {
 
     double dy = 1/N;
 
-    if (eta == 0) {
+    if (row == 0) {
         double etaNext = (row + 1)/N;
         double etaPrev =  row/N;
-        return (u(xhi,etaNext) - u(xhi, etaPrev)) / dy;
-    } else if (eta == 1) {
+        return (uTakeInComp(xhi,etaNext) - uTakeInComp(xhi, etaPrev)) / dy;
+    } else if (row == N) {
         double etaNext = row/N;
         double etaPrev = (row - 1)/N;
-        return (u(xhi, etaNext) - u(xhi, etaPrev)) / dy;
+        return (uTakeInComp(xhi, etaNext) - uTakeInComp(xhi, etaPrev)) / dy;
     } else {
         double etaNext = (row + 1)/N;
         double etaPrev = (row - 1)/N;
-        return (u(xhi, etaNext) - u(xhi, etaPrev)) / (2*dy);
+        return (uTakeInComp(xhi, etaNext) - uTakeInComp(xhi, etaPrev)) / (2*dy);
     }
 }
 
@@ -166,8 +173,6 @@ double Matrix::calculateError() const {
     }
 
     double rms = accum / ((M+1)*(N+1));
-
-    double maxErr = *std::max_element(allErrs.begin(), allErrs.end());
 
     return rms;
 }
