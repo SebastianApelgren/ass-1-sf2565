@@ -56,5 +56,31 @@ int main() {
 
     std::cout << "Wrote stepsVec.txt and errors.txt\n";
 
+    //Task 2: varying a
+    nrOfIterations = 21;
+    M = 100;
+    N = 100;
+
+    std::vector<double> aVec;
+    std::vector<double> aErrs;
+
+    std::cout << "\n" << "Starting Part 2.2" << "\n";
+
+    for (int i = 0; i < nrOfIterations; ++i) {
+        a = i*0.1;
+        mat.a = a;
+        mat.resize(M, N);
+
+        double err = mat.calculateError();
+
+        aVec.emplace_back(a);
+        aErrs.emplace_back(err);
+    }
+
+    FileHandler::writeVectorToFile(aVec,   "aVec.txt");
+    FileHandler::writeVectorToFile(aErrs, "aErrors.txt");
+
+    std::cout << "Wrote aVec.txt and aErrors.txt\n";
+
     return 0;
 }

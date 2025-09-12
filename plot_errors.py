@@ -25,4 +25,18 @@ plt.title("Convergence of numerical method")
 plt.grid(True, which="both", ls="--", alpha=0.7)
 plt.legend()
 plt.tight_layout()
-plt.show()
+
+a = np.loadtxt("cmake-build-debug/aVec.txt")
+aErrors = np.loadtxt("cmake-build-debug/aErrors.txt")
+
+plt.figure(figsize=(6, 4))
+plt.plot(a, aErrors, marker="o", linestyle="-", label="aErrors")
+
+plt.xlabel("a")
+plt.ylabel("error")
+plt.title("mean error vs a")
+plt.grid(True, which="both", ls="--", alpha=0.7)
+plt.legend()
+plt.tight_layout()
+
+plt.show()  
